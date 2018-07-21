@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,62 +43,36 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="post.html">Post photos</a></li>
+            <li class="active"><a href="index.php">Main page</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
-
-  	<div id="hello">
-  	    <div class="container">
-  	    	<div class="row">
-  	    		<div class="col-lg-8 col-lg-offset-2 centered">
-  	    			<h1>My Memories</h1>
-  	    			<h2>~ In Cebu ~</h2>
-  	    		</div><!-- /col-lg-8 -->
-  	    	</div><!-- /row -->
-  	    </div> <!-- /container -->
-  	</div><!-- /hello -->
-  	
-  	
-  	<div class="container">
+    <div class="container">
       <div class="main-contents">
-    		<div class="row centered mt grid">
-    			<h3>Album</h3>
-    			<div class="col-lg-4">
-    				<a href="detail.html" class="trim"><img class="picture" src="assets/img/background_img2.jpg" alt=""></a>
-    			</div>
-    			<div class="col-lg-4">
-    				<a href="#"><img class="picture" src="assets/img/02.jpg" alt=""></a>
-    			</div>
-    			<div class="col-lg-4">
-    				<a href="#"><img class="picture" src="assets/img/03.jpg" alt=""></a>
-    			</div>
-    		</div>
-    		
-    		<div class="row centered mt grid">
-    			<div class="col-lg-4">
-    				<a href="#"><img class="picture" src="assets/img/04.jpg" alt=""></a>
-    			</div>
-    			<div class="col-lg-4">
-    				<a href="#"><img class="picture" src="assets/img/05.jpg" alt=""></a>
-    			</div>
-    			<div class="col-lg-4">
-    				<a href="#"><img class="picture" src="assets/img/06.jpg" alt=""></a>
-    			</div>
+        <div class="col-lg-10 col-lg-offset-1 centered">
+          <div class="col-xs-4">
+            <a href="" class="trim"><img class="picture" src="assets/img/background_img2.jpg" alt=""></a>
+          </div>
+          <div class="col-xs-8">
+            <div class="details">
+              <h3 class="post-title">タイトル（２４文字まで）</h3>
+              <h4 class="post-date">2018/12/09</h4><br>
+              <h3 class="post-detail">ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。ここに内容を書きます。（１４０文字まで）</h3>
+            </div>
+          </div>
         </div>
-  		</div>
-  	</div>
+      </div>
+    </div>
 
-  	<div id="f">
-  		<div class="container">
-  			<div class="row">
-  				<p>I <i class="fa fa-heart"></i> Cubu.</p>
-  			</div>
-  		</div>
-
-  	</div>
+    <div id="f">
+      <div class="container">
+        <div class="row">
+          <p>I <i class="fa fa-heart"></i> Cubu.</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
