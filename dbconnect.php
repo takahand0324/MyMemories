@@ -1,6 +1,6 @@
 <?php
     //dbconnectの処理は基本的に一緒
-    $dsn = 'mysql:dbname=LearnSNS;host=localhost';
+    $dsn = 'mysql:dbname=MyMemories;host=localhost';
     $user = 'root';
     $password='';
     $dbh = new PDO($dsn, $user, $password);

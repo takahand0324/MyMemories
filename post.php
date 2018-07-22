@@ -1,43 +1,21 @@
 <?php
-
+//今回パスワードないのにセッション必要か？
+//img_name入らないのはどうして？
     
-    require ('dbconnect.php');
-    // ここにDBに接続する処理を記述する
-    $dsn = 'mysql:dbname=MyMemories;host=localhost';
-    // 変数定義
-    $user = 'root';
-    $password='';
-    $dbh = new PDO($dsn, $user, $password);
-    $dbh ->query('SET NAMES utf8');
 
+
+    $img_name = '';
     if(!empty($_POST)){
         $title = htmlspecialchars($_POST['title']);
         $date = htmlspecialchars($_POST['date']);
         $detail = htmlspecialchars($_POST['detail']);
-
-        $sql = 'INSERT INTO `feeds`(`title`,`date`,`detail`)VALUES (?,?,?)';
-
-        $data[] = $title;
-        $data[] = $date;
-        $data[] = $detail;
-        $stml = $dbh->prepare($sql);
-        $stml->execute($data);
-
+        $img_name = $_FILES['img_name']['name'];
     }
-    session_start();
+    //session_start();
     $title = '';
     $date = '';
     $datail = '';
     $errors = [];
-
-        //getにactionというキーが存在するか、そのactionの中にrewriteが存在するのか、check.phpから戻ってきているのかの確認
-    if (isset($_GET['action']) && $_GET['action'] == 'rewrite'){
-        $_POST['input_title'] = $_SESSION['title'];
-        $_POST['input_date'] = $_SESSION['date'];
-        $_POST['input_detail'] = $_SESSION['detail'];
-
-        $errors['rewrite'] = true;
-    }
 
     if (!empty($_POST)){
         $title = $_POST['title'];
@@ -46,8 +24,11 @@
 
         // ユーザー名の空チェック
         // シングルクォーテーション''=空じゃなければ
+        $count = strlen($title);
         if ($title == ''){
             $errors['title'] = 'blank';
+        }elseif ($count >= 24){
+            $errors['title'] = 'length';
         }
         // ユーザー名の空チェック
         // シングルクォーテーション''=空じゃなければ
@@ -58,19 +39,19 @@
         $count = strlen($detail);
         if ($detail == ''){
             $errors['detail'] = 'blank';
-        }elseif ($count < 4){
+        }elseif ($count >= 140){
             $errors['detail'] = 'length';
         }
         //画像名を取得
         //undifined index連想配列が定義されていない
         //もしパラメーターが存在していなければ、ユーザーが送った画像が表示される。
-        $file_name = '';
+        $img_name = '';
         if (!isset($_GET['action'])){
-            $file_name = $_FILES['img_name']['name'];
+            $img_name = $_FILES['img_name']['name'];
         }
         //画像が送られてきた場合
-        if (!empty($file_name)){
-            $file_type = substr($file_name, -3);//画像名の後ろから3文字取得
+        if (!empty($img_name)){
+            $file_type = substr($img_name, -3);//画像名の後ろから3文字取得
             $file_type = strtolower($file_type);//大文字が含まれていた場合全て小文字化
             if ($file_type != 'jpg' && $file_type != 'png' && $file_type != 'gif'){
                 $errors['img_name'] = 'type';
@@ -79,6 +60,32 @@
         }else{
             $errors['img_name'] = 'blank';
         }
+
+        if (empty($errors)){
+            $date_str = date('YmdHis');
+            $submit_file_name = $date_str.$img_name;
+            //ここで画像をアップデート先に移す
+            move_uploaded_file($_FILES['img_name']['tmp_name'], 'post_img/'.$submit_file_name);
+            // $errorsが空だった場合はバリデーション成功
+
+
+        require ('dbconnect.php');
+        $sql = 'INSERT INTO `feeds`(`title`,`date`,`detail`,`img_name`) VALUES (?,?,?,?)';
+
+        $data[] = $title;
+        $data[] = $date;
+        $data[] = $detail;
+        $data[] = $submit_file_name;
+        $stml = $dbh->prepare($sql);
+        $stml->execute($data);
+
+
+            $dbh = null;
+
+            header('Location: index.php');
+            exit();
+        }
+
 
     }
 ?>
@@ -140,11 +147,15 @@
             <form method="POST" action="post.php" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="task">タイトル</label>
-                    <input name="title" class="form-control">
+                    <input name="title" class="form-control" id="title" placeholder="24文字以内">
                     <?php if (isset($errors['title']) && $errors['title'] == 'blank'):?>
-                            <p class = "text-danger">タイトルを入力してください</p>
-                        <?php endif; ?>
+                        <p class = "text-danger">タイトルを入力してください</p>
+                    <?php endif; ?>
+                    <?php if (isset($errors['title']) && $errors['title'] == 'length'):?>
+                        <p class = "text-danger">24文字以内でタイトルを入力してください</p>
+                    <?php endif; ?>
                 </div>
+
                 <div class="form-group">
                     <label for="date">日程</label>
                     <input type="date" name="date" class="form-control">
@@ -154,17 +165,17 @@
                 </div>
                 <div class="form-group">
                     <label for="detail">詳細</label>
-                    <textarea name="detail" class="form-control" rows="3"></textarea><br>
-                    <?php if (isset($errors['detail']) && $errors['detail'] == 'blank'):?>
-                            <p class = "text-danger">詳細を入力してください</p>
-                        <?php endif; ?>
-                        <?php if (isset($errors['password']) && $errors['password'] == 'length'):?>
-                            <p class = "text-danger">140文字以内で詳細を入力してください</p>
-                        <?php endif; ?>
+                    <textarea name="detail" class="form-control" rows="3"id="detail" placeholder="140文字以内"></textarea><br>
+                     <?php if (isset($errors['detail']) && $errors['detail'] == 'blank'):?>
+                        <p class = "text-danger">詳細を入力してください</p>
+                    <?php endif; ?>
+                    <?php if (isset($errors['detail']) && $errors['detail'] == 'length'):?>
+                        <p class = "text-danger">140文字以内で詳細を入力してください</p>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label for="img_name">写真</label>
-                    <input type="file" name="img_name" id="img_name">
+                    <input type="file" name="img_name" id="img_name" accept = "img/*">
                     <?php if (isset($errors['img_name']) && $errors['img_name'] == 'blank'){ ?>
                             <p class = "text-danger">画像を選択してください</p>
                         <?php } ?>
@@ -173,6 +184,7 @@
                         <?php } ?>
                 </div><br>
                 <input type="submit" class="btn btn-primary" value="投稿">
+                <a href="detail.php" style="float: right; padding-top: 6px;" class="text-success">詳細</a>
             </form>
         </div>
     </div>
