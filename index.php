@@ -92,7 +92,7 @@
                     <?php foreach ($photos as $photo): ?>
                          <div class="col-lg-4">
                          <a href="detail.php?id=<?php echo $photo['id']; ?>" class="trim"><img class="picture" src="post_img/<?php echo $photo['img_name']; ?>" alt=""></a>
-                    </div>
+                         </div>
                     <?php endforeach; ?>
                </div>
           </div>
