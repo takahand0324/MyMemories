@@ -92,12 +92,12 @@ a:after {
 	font-size: 14px;
 	padding-top: 15px;
 	padding-bottom: 15px;
-	background-color: #23C5CC;
+	background-color: #23cc95;
 }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-	color: #23C5CC;
-	background-color: #fff;
+	color: #4023cc;
+	background-color: #23cc95;
 }
 
 .navbar-brand {
