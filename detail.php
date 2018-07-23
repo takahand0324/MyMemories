@@ -2,6 +2,9 @@
     require('dbconnect.php');
 
     // ２．SQL文を実行する
+    //SEECT文で情報を引っ張ってくる
+    //GETで特定の情報を引っ張ってくる
+
     $sql = 'SELECT * FROM feeds WHERE `id` = ?';
     // SQLを実行
     $data = array($_GET['id']);

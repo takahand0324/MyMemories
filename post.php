@@ -1,7 +1,7 @@
 <?php
 //今回パスワードないのにセッション必要か？
 //img_name入らないのはどうして？
-    
+    require ('dbconnect.php');
 
 
     $img_name = '';
@@ -24,7 +24,8 @@
 
         // ユーザー名の空チェック
         // シングルクォーテーション''=空じゃなければ
-        $count = strlen($title);
+        //バリデーションで日本語の文字数を制限する場合は、strlenの前にmb(マルチバイト)をつける
+        $count = mb_strlen($title);
         if ($title == ''){
             $errors['title'] = 'blank';
         }elseif ($count >= 24){
@@ -36,7 +37,7 @@
             $errors['date'] = 'blank';
         }
 
-        $count = strlen($detail);
+        $count = mb_strlen($detail);
         if ($detail == ''){
             $errors['detail'] = 'blank';
         }elseif ($count >= 140){
@@ -45,6 +46,7 @@
         //画像名を取得
         //undifined index連想配列が定義されていない
         //もしパラメーターが存在していなければ、ユーザーが送った画像が表示される。
+        //$_FILESを使うときはFORMタグにenctype="multipart/form-data"が必要
         $img_name = '';
         if (!isset($_GET['action'])){
             $img_name = $_FILES['img_name']['name'];
@@ -62,14 +64,13 @@
         }
 
         if (empty($errors)){
+            //写真のデータを被らせないために、日時と写真の名前を混合する
             $date_str = date('YmdHis');
             $submit_file_name = $date_str.$img_name;
             //ここで画像をアップデート先に移す
             move_uploaded_file($_FILES['img_name']['tmp_name'], 'post_img/'.$submit_file_name);
             // $errorsが空だった場合はバリデーション成功
 
-
-        require ('dbconnect.php');
         $sql = 'INSERT INTO `feeds`(`title`,`date`,`detail`,`img_name`) VALUES (?,?,?,?)';
 
         $data[] = $title;
